@@ -1,20 +1,16 @@
 "use client"
 
-import { toast } from "~/hooks/use-toast";
+import { toast } from "sonner"
 
 export function AppErrClient(err : any) {
     if (err instanceof Error) {
-        toast({
-            title : err.name,
+        toast(err.name, {
             description : err.message,
-            variant : "destructive"
         })
     }
     else {
-        toast({
-            title : "Failed",
+        toast("Failed", {
             description : "Unknown Error Occured",
-            variant : "destructive"
         })
     }
 };

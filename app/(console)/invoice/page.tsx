@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
-import InvoiceOverview from '@/components/invoices/invoice-overview'
 import { InvoiceProvider } from '@/contexts/invoice-context'
+import InvoiceOverview from '@/components/invoices/invoice-overview'
 
 export default function InvoicesPage() {
   return (
