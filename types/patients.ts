@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createPatientsSchema } from "~/schemas/patients";
+import { createPatientsSchema } from "@/schemas/patients";
 
 export type Patient = {
     id: string;
