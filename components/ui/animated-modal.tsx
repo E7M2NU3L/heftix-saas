@@ -51,6 +51,7 @@ export const ModalTrigger = ({
      className?: string;
     asChild? : boolean;
 }) => {
+  console.log(children);
   const { setOpen } = useModal();
   const Comp = asChild ? Slot : "button"
     return (
