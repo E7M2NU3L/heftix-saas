@@ -12,7 +12,9 @@ import { Calendar } from '../ui/calendar'
 
 export function AppointmentScheduler() {
   const [appointments, setAppointments] = useState<Appointment[]>([])
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  console.log(setSelectedDate);
 
   const addAppointment = (newAppointment: Appointment) => {
     // Validate appointment doesn't overlap with existing ones

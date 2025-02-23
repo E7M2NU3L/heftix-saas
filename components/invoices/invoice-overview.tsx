@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -22,8 +21,6 @@ import {
 import { ChevronDown, Filter } from 'lucide-react'
 import { useInvoices } from '@/contexts/invoice-context'
 import type { Invoice } from '@/contexts/invoice-context'
-import { format } from 'date-fns'
-import { cn } from '@/lib/utils'
 
 export default function InvoiceOverview() {
   const { invoices, setInvoices } = useInvoices()
@@ -32,29 +29,7 @@ export default function InvoiceOverview() {
   const [sortBy, setSortBy] = useState('date')
   const [sortOrder, setSortOrder] = useState('desc');
 
-  console.log(selectedInvoice, setInvoices);
-
-  const formatDate = (dateStr: string) => {
-    try {
-      return format(new Date(dateStr), 'MMM d, yyyy')
-    } catch (error) {
-      console.error('Invalid date:', dateStr)
-      return dateStr
-    }
-  }
-
-  const filteredInvoices = invoices
-    .filter((invoice) => filterStatus === 'all' || invoice.status === filterStatus)
-    .sort((a : any , b : any) => {
-      if (sortBy === 'date') {
-        return sortOrder === 'asc' 
-          ? new Date(a.date).getTime() - new Date(b.date).getTime()
-          : new Date(b.date).getTime() - new Date(a.date).getTime()
-      }
-      if (a[sortBy] < b[sortBy]) return sortOrder === 'asc' ? -1 : 1
-      if (a[sortBy] > b[sortBy]) return sortOrder === 'asc' ? 1 : -1
-      return 0
-    })
+  console.log(selectedInvoice, setInvoices, invoices, setSelectedInvoice, filterStatus);
 
   const handleSort = (column: keyof Invoice) => {
     if (sortBy === column) {
@@ -121,24 +96,6 @@ export default function InvoiceOverview() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredInvoices.map((invoice) => (
-            <TableRow key={invoice.id} onClick={() => setSelectedInvoice(invoice)} className="cursor-pointer">
-              <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
-              <TableCell>{invoice.patientName}</TableCell>
-              <TableCell>{formatDate(invoice.date)}</TableCell>
-              <TableCell>
-                <span className={cn(
-                  "px-2 py-1 rounded-full text-xs font-semibold",
-                  invoice.status === 'paid' && "bg-green-100 text-green-800",
-                  invoice.status === 'pending' && "bg-yellow-100 text-yellow-800",
-                  invoice.status === 'overdue' && "bg-red-100 text-red-800"
-                )}>
-                  {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
-                </span>
-              </TableCell>
-              <TableCell className="text-right">${invoice.amount.toFixed(2)}</TableCell>
-            </TableRow>
-          ))}
         </TableBody>
       </Table>
     </div>

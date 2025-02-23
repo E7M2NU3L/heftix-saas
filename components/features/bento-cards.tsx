@@ -47,7 +47,7 @@ import { BellIcon, CalendarIcon, FileInputIcon, FileTextIcon, GlobeIcon } from "
       description: "Get notifications for upcoming appointments, new reports, and follow-ups.",
       href: "/",
       cta: "Learn more",
-      background: <img src="https://cdn.dribbble.com/userupload/16257829/file/original-cd7d265456814a706e4ef4c43a69e3d9.png?resize=752x&vertical=center" className="absolute -right-20 -top-20 opacity-60" />,
+      background: <Image width={348} height={240} alt="" src="https://cdn.dribbble.com/userupload/16257829/file/original-cd7d265456814a706e4ef4c43a69e3d9.png?resize=752x&vertical=center" className="absolute -right-20 -top-20 opacity-60" />,
       className: "lg:col-start-3 lg:col-end-3 lg:row-start-2 lg:row-end-4",
     },
   ];

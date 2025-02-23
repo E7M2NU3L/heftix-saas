@@ -28,12 +28,13 @@ export default function SignUpForm() {
   });
 
   const registerMutation = {};
+  console.log(registerMutation);
 
   const router = useRouter();
 
   const handleSubmit = async (values : RegisterProps) => {
     try {
-      const response = await {id : ""};
+      const response = await {id : "", ...values};
       if (!response?.id) {
         toast("Error", {
           description : "Registration Failed, try again",
@@ -42,7 +43,7 @@ export default function SignUpForm() {
 
       router.push("/auth/signin");
     } catch (error) {
-      return false;
+      console.log(error);
     }
   }
 
