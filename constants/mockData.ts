@@ -1,4 +1,4 @@
-import { Document, Patient } from "~/types/patients";
+import { Document, Patient } from "@/types/patients";
 
 export const mockPatients: Patient[] = [
   {
