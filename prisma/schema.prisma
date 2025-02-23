@@ -1,0 +1,200 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  password      String          @default("")
+  accounts      Account[]
+  sessions      Session[]
+  patients      Patient[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? 
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+
+model Patient {
+  id               String       @id @default(cuid())
+  firstname        String
+  lastname         String
+  gender           Gender?   // Enum for gender
+  age              String
+  maritalStatus    MaritalStatus? // Enum for marital status
+  nationality      String?
+  mobile           String
+  email            String    @unique
+  emergency        Emergency?
+  emergencyId      Int? @unique
+  bloodgroup       BloodGroup?
+  allergies        Allergy[] // Relation for allergies
+  medicalHistory   String?
+  medications      Medication[] // Relation for medications
+  surgicalHistory  String?
+  familyHistory    String?
+  badHabits        String?
+  therapist         User @relation(fields: [therapistId], references: [id])
+  therapistId       String
+  therapy           SessionDetails[]
+  reports           Reports[]
+  prescriptions     Prescriptions[]
+  testresults           TestResults[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model Emergency {
+  id           String    @id @default(cuid())
+  fullname     String
+  relationship String
+  contact      String
+  patient      Patient? @relation(fields: [patientId], references: [id])
+  patientId    String? @unique
+}
+
+model Allergy {
+  id        String    @id @default(cuid())
+  allergy   String
+  patient   Patient? @relation(fields: [patientId], references: [id])
+  patientId String
+}
+
+model Medication {
+  id        String    @id @default(cuid())
+  med       String?
+  patient   Patient? @relation(fields: [patientId], references: [id])
+  patientId String
+}
+
+model SessionDetails {
+  id      String @id @default(cuid())
+  therapist Patient @relation(fields: [therapistId], references: [id])
+  therapistId String
+  therapytype String
+  duration String
+  Notes     String
+}
+
+model Reports {
+  id  String @id @default(cuid())
+  patient Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  reporttype ReportType
+  url       String
+}
+
+model Prescriptions {
+  id String @id @default(cuid())
+  patient Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  url     String? @default("")
+  recommendations String? @default("")
+  medications PrescribedMedicines[]
+}
+
+model PrescribedMedicines {
+  id String @id @default(cuid())
+  prescription Prescriptions @relation(fields: [prescriptionId], references: [id])
+  prescriptionId String 
+  medication String
+  dosage String
+  schedules String
+}
+
+model TestResults {
+  id String @id @default(cuid())
+  patient Patient @relation(fields: [patientId], references: [id])
+  patientId String
+  test      String
+  url       String
+}
+
+enum ReportType {
+  Image
+  Video
+  Audio
+}
+
+enum Gender {
+  Male
+  Female
+  Transgender
+  Others
+  PreferredNotToSay
+  unknown
+}
+
+enum MaritalStatus {
+  Single
+  Married
+  Divorced
+  Widowed
+  Other
+  unknown
+}
+
+enum BloodGroup {
+  A_pos
+  A_neg
+  B_pos
+  B_neg
+  AB_pos
+  AB_neg
+  O_pos
+  O_neg
+  unknown
+}
